@@ -15,6 +15,9 @@ parser.add_argument('--json', action='store_true', help='Output raw JSON to the 
 parser.add_argument('--full', action='store_true', help='Output all SAN addresses as well')
 parser.add_argument('--disable-colors', action='store_true', help='Disable colors when writing a human readable ')
 parser.add_argument('--verbose', action='store_true', default=False, dest='verbose', help='Display debug logging.')
+parser.add_argument('--proxy-host', required = False, help = 'Adresse du proxy')
+parser.add_argument('--proxy-port', required = False, help = 'Port de connexion au proxy')
+parser.add_argument('--proxy-auth', required = False, help = 'Authentification auprès du proxy.')
 
 def main():
     args = parser.parse_args()
@@ -60,7 +63,10 @@ def main():
 
             sys.stdout.flush()
 
-    certstream.listen_for_events(_handle_messages, skip_heartbeats=True)
+    certstream.listen_for_events( _handle_messages, skip_heartbeats=True, 
+                                  http_proxy_host = args.proxy_host, 
+                                  http_proxy_port = args.proxy_port, 
+                                  http_proxy_auth = args.proxy_auth)
 
 if __name__ == "__main__":
     main()
